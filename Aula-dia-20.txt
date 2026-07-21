@@ -1,0 +1,43 @@
+drop table if exists tb_item_pedido;
+drop table if exists tb_pedido;
+drop table if exists tb_status;
+drop table if exists tb_usuario;
+drop table if exists tb_produto;
+
+create table tb_produto (
+    id_produto serial primary key,
+    tx_nome varchar(100),
+    tx_descricao varchar(255),
+    vl_preco numeric(10,2) not null,
+    nr_estoque integer not null
+);
+
+create table tb_usuario (
+    id_usuario serial primary key,
+    nome varchar(100),
+    nr_idade integer,
+    tx_email varchar(100),
+    tx_senha varchar(100),
+    dt_data_cadastro timestamp default current_timestamp
+);
+
+create table tb_status (
+    id_status serial primary key,
+    tx_categoria varchar(50)
+);
+
+create table tb_pedido (
+    id_pedido serial primary key,
+    cd_usuario int references tb_usuario(id_usuario),
+    dt_data_pedido timestamp default current_timestamp,
+    cd_status int references tb_status(id_status),
+    nr_total numeric(10,2)
+);
+
+create table tb_item_pedido (
+    id_item serial primary key,
+    id_pedido int references tb_pedido(id_pedido),
+    id_produto int references tb_produto(id_produto),
+    nr_quantidade integer,
+    nr_preco_unitario numeric(10,2)
+);
