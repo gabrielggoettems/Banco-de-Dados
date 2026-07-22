@@ -1,0 +1,69 @@
+drop table tb_calculadora;
+
+create table tb_calculadora(
+
+	id_calculadora serial primary key,
+	nr_valor numeric(18,0) not null,
+	tx_operacao varchar(250) not null
+
+);
+
+insert into tb_calculadora(nr_valor,tx_operacao)
+
+values (30, '/');
+
+insert into tb_calculadora(nr_valor,tx_operacao)
+values (60, '/');
+
+insert into tb_calculadora(nr_valor,tx_operacao)
+values  (90, '/');
+
+insert into tb_calculadora(nr_valor,tx_operacao)
+values (120, '/');
+
+
+
+insert into tb_calculadora(nr_valor,tx_operacao)
+
+values (30, '*');
+
+insert into tb_calculadora(nr_valor,tx_operacao)
+values (60, '*');
+
+insert into tb_calculadora(nr_valor,tx_operacao)
+values  (90, '*');
+
+insert into tb_calculadora(nr_valor,tx_operacao)
+values (120, '*');
+
+
+
+insert into tb_calculadora(nr_valor,tx_operacao)
+
+values (30, '-');
+
+insert into tb_calculadora(nr_valor,tx_operacao)
+values (60, '-');
+
+insert into tb_calculadora(nr_valor,tx_operacao)
+values  (90, '-');
+
+insert into tb_calculadora(nr_valor,tx_operacao)
+values (120, '-');
+
+
+insert into tb_calculadora(nr_valor,tx_operacao)
+
+values (30, '+');
+
+insert into tb_calculadora(nr_valor,tx_operacao)
+values (60, '+');
+
+insert into tb_calculadora(nr_valor,tx_operacao)
+values  (90, '+');
+
+insert into tb_calculadora(nr_valor,tx_operacao)
+values (120, '+');
+
+select sum(nr_valor) as valorTotal from tb_calculadora
+where tx_operacao = '+';
