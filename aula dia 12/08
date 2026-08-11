@@ -1,0 +1,57 @@
+
+create table tb_usuario(
+id_usuario serial ,
+tx_nome varchar(100) not null,
+tx_email varchar(100) not null unique,
+tx_senha varchar(20) not null ,
+dt_datanascimento date not null,
+tx_telefone varchar(11)not null unique,
+
+constraint pk_usuario primary key (id_usuario)
+);
+
+
+
+create table tb_compra(
+id_compra serial,
+cd_usuario varchar(255) not null,
+cd_produtos varchar(255) not null,
+cd_status varchar(255) not null,
+nr_valor numeric(18,2) not null,
+dt_datacompra date not null,
+
+constraint fk_usuario foreign key (cd_usuario) references tb_usuario(tx_nome),
+constraint ck_valor_minimo check (length(nr_valor) > 0),
+constraint ck_data_futuro check (dt_datacompra <= current_date),
+);
+
+create table tb_produto (
+    id_produto serial,
+    tx_nome varchar(255) not null,
+    cd_categoria int not null,
+    tx_marca varchar(100) not null,
+    nr_preco numeric(18,2) not null,
+    nr_estoque numeric(18,0) not null default 0,
+
+    constraint pk_produto primary key (id_produto),
+
+    constraint fk_produto_categoria
+        foreign key (cd_categoria)
+        references tb_categoria(id_categoria),
+
+    constraint ck_produto_preco
+        check (nr_preco >= 0),
+
+    constraint ck_produto_estoque
+        check (nr_estoque >= 0)
+);
+
+
+create table tb_categoria(
+	id_categoria serial,
+	tx_nome varchar(255),
+
+	constraint pk_categoria primary key (id_categoria)
+);
+
+
