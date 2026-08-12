@@ -1,0 +1,116 @@
+
+drop table if exists tb_usuario,tb_compra,tb_produto,tb_categoria,tb_perfil;
+
+create table tb_perfil(
+id_perfil serial,
+tx_nome varchar(255) not null,
+
+constraint pk_perfil primary key (id_perfil)
+);
+
+insert into tb_perfil(tx_nome)
+values
+('admin'),
+('user');
+
+
+create table tb_usuario(
+id_usuario serial,
+tx_nome varchar(100) not null,
+tx_email varchar(100) not null unique,
+tx_senha varchar(20) not null,
+dt_datanascimento date not null,
+tx_telefone varchar(11) not null unique,
+cd_perfil integer not null,
+
+constraint pk_usuario primary key (id_usuario),
+constraint fk_usuario_perfil foreign key (cd_perfil)
+references tb_perfil(id_perfil)
+);
+
+
+insert into tb_usuario
+(tx_nome,tx_email,tx_senha,dt_datanascimento,tx_telefone,cd_perfil)
+values
+('ana souza','ana.souza@email.com','senha123','1995-04-12','11987654321',2),
+('bruno lima','bruno.lima@email.com','senha123','1988-09-23','21991234567',1),
+('carla mendes','carla.mendes@email.com','senha123','1992-01-30','31984561234',2),
+('diego alves','diego.alves@email.com','senha123','2000-07-18','41999887766',2),
+('eduarda rocha','eduarda.rocha@email.com','senha123','1997-11-05','51988776655',2),
+('felipe martins','felipe.martins@email.com','senha123','1985-03-14','61977665544',1),
+('gabriela costa','gabriela.costa@email.com','senha123','1999-06-27','71966554433',2),
+('henrique dias','henrique.dias@email.com','senha123','1990-12-09','81955443322',2),
+('isabela nunes','isabela.nunes@email.com','senha123','1994-08-16','91944332211',2),
+('joao pereira','joao.pereira@email.com','senha123','1987-02-25','11933221100',1);
+
+
+create table tb_categoria(
+id_categoria serial,
+tx_nome varchar(255),
+
+constraint pk_categoria primary key (id_categoria)
+);
+
+insert into tb_categoria(tx_nome)
+values
+('processadores'),
+('placas de video'),
+('memoria ram'),
+('placas mae'),
+('ssd'),
+('fontes'),
+('gabinetes');
+
+
+create table tb_produto(
+id_produto serial,
+tx_nome varchar(255) not null,
+cd_categoria int not null,
+tx_marca varchar(100) not null,
+nr_preco numeric(18,2) not null,
+nr_estoque numeric(18,0) not null default 0,
+
+constraint pk_produto primary key (id_produto),
+
+constraint fk_produto_categoria
+foreign key (cd_categoria)
+references tb_categoria(id_categoria),
+
+constraint ck_produto_preco
+check (nr_preco >= 0),
+
+constraint ck_produto_estoque
+check (nr_estoque >= 0)
+);
+
+
+insert into tb_produto
+(tx_nome,cd_categoria,tx_marca,nr_preco,nr_estoque)
+values
+('ryzen 5 5600',1,'amd',799.90,10),
+('rtx 4060',2,'nvidia',1899.90,5),
+('kingston fury 16gb',3,'kingston',299.90,20),
+('b550m',4,'msi',599.90,8),
+('kingston nv2 1tb',5,'kingston',399.90,15),
+('kingston nv2 512g',5,'kingston',250.90,10);
+
+create table tb_compra(
+id_compra serial,
+cd_usuario integer not null,
+cd_produtos varchar(255) not null,
+cd_status varchar(255) not null,
+nr_valor numeric(18,2) not null,
+dt_datacompra date not null,
+
+constraint fk_usuario
+foreign key (cd_usuario)
+references tb_usuario(id_usuario),
+
+constraint ck_valor_minimo
+check (nr_valor >= 0),
+
+constraint ck_data_futuro
+check (dt_datacompra <= current_date)
+);
+
+select * from tb_compra;
