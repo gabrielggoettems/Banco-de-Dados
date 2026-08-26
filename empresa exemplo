@@ -1,0 +1,78 @@
+select tp.tx_nome nome,c.tx_nome ,tp.vl_preco,tp.nr_estoque,tp.fl_ativo 
+from tb_produto tp 
+inner join tb_categoria c
+on c.id_categoria = tp.cd_categoria    
+where tp.vl_preco between 500 and 1000
+and tp.fl_ativo is true;
+
+
+select cl.tx_nome,cl.tx_cpf,cl.tx_email,cl.tx_estado
+from tb_cliente cl
+where upper(tx_estado) in ( upper'SC',upper'PR') 
+order by tx_nome asc;
+ 
+select tx_nome,nr_idade,tx_email
+from tb_cliente
+where tx_email is null or nr_idade > 50 ;
+
+
+select 
+tp.tx_nome as Produto,
+tp.vl_preco as Preco,
+tp.tx_descricao Descricao,
+tf.tx_nome Fornecedor,
+tp.fl_ativo Ativo
+
+
+
+from tb_produto tp
+left join tb_fornecedor tf
+on tf.id_fornecedor = tp.cd_fornecedor
+inner join tb_categoria c
+on c.id_categoria = tp.cd_categoria 
+where tp.fl_ativo is true
+order by vl_preco desc;
+
+select tx_nome as nome,tx_cidade as cidade,
+
+
+
+select c.tx_nome
+from tb_categoria c
+left join tb_produto tp
+    on tp.cd_categoria = c.id_categoria
+where tp.id_produto is null
+order by c.tx_nome asc;
+
+select
+    c.tx_nome as nome ,
+    c.tx_cidade as cidade,
+    count(id_venda) as totalVendas
+from tb_cliente c
+left join tb_venda v on v.id_venda = c.id_cliente
+group by 
+c.tx_nome, c.tx_cidade
+
+order by 3 desc;
+
+
+select 
+tx_nome as nome, 
+count(id_venda) as totalVendas
+from tb_cliente c
+left join tb_venda v on v.id_venda = c.id_cliente
+group by 
+c.tx_nome 
+order by tx_nome desc;
+
+
+select
+    c.tx_nome,
+    c.tx_cidade,
+    sum(venda.nr_quantidade * venda.vl_unitario) as total_venda
+from tb_cliente c
+left join tb_venda v on v.cd_cliente = c.id_cliente
+inner join tb_item_venda venda on venda.cd_venda = v.id_venda
+group by c.tx_nome, c.tx_cidade
+order by c.tx_nome;
+
