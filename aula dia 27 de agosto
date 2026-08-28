@@ -1,0 +1,104 @@
+select
+
+	cli.tx_nome as nome,
+	email.tx_contato as email,
+ 	telefone.tx_contato as telefone,
+ 	te.tx_cidade as cidade,
+ 	te.tx_estado
+	
+from tb_cliente cli
+inner join tb_contato email
+on cli.id_cliente = email.cd_cliente
+and email.cd_tipo_contato = 1
+inner join tb_contato telefone
+on cli.id_cliente = email.cd_cliente
+and telefone.cd_tipo_contato = 2
+inner join tb_endereco te 
+on te.id_endereco = cli.cd_endereco;
+
+
+select
+
+	cli.tx_nome as nome,
+	email.tx_contato as email
+
+	
+from tb_cliente cli
+left join tb_contato email
+on cli.id_cliente = email.cd_cliente
+and cd_tipo_contato = 1
+and email.fl_principal is true
+order by cli.tx_nome asc;
+
+
+select
+
+	cli.tx_nome as nome,
+	ta.tx_comentario as comentario,
+	tp.tx_descricao as nota
+	
+from tb_cliente cli
+left join tb_avaliacao ta 
+on ta.id_avaliacao = cli.id_cliente
+left join tb_produto tp 
+on tp.id_produto = ta.cd_produto;
+
+
+
+
+select
+    cli.tx_nome as nome,
+    cli.nr_idade as idade,
+    (select avg(nr_idade) from tb_cliente) as media
+from tb_cliente cli
+where cli.nr_idade > (
+    select avg(nr_idade)
+    from tb_cliente
+);
+
+
+
+
+
+select 
+	
+	tx_nome as nome,
+	nr_idade as idade
+	
+from tb_cliente
+
+where
+	nr_idade > (
+	select
+		
+		sum(nr_idade) / count(id_cliente) as media	
+			
+	from
+		tb_cliente);
+
+	
+	with as media                  
+	
+	
+	
+	
+		
+select
+
+  cli.tx_nome as nome,
+  v.dt_venda as data_compra_mais_recente
+  
+from tb_cliente cli
+
+inner join tb_venda v
+on cli.id_cliente = v.cd_cliente
+
+where v.tx_status = 'PAGO'
+and not exists (
+    select 1
+    from tb_venda ven
+    where ven.cd_cliente = v.cd_cliente
+    and ven.tx_status = 'PAGO'
+    and ven.dt_venda > v.dt_venda
+);
+
