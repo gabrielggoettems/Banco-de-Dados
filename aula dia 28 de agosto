@@ -1,0 +1,38 @@
+	select 
+
+		min(nr_idade)
+	
+	
+	from tb_cliente
+
+
+	
+	with variavel as ( 
+select
+    cd_empresa,
+    sum(iv.nr_quantidade * iv.vl_unitario) as receitabruta
+from tb_venda v
+join tb_item_venda iv on iv.cd_venda = v.id_venda
+where upper(v.tx_status) = 'PAGO'
+group by cd_empresa
+),
+total  as (
+select 
+	tv.cd_empresa,
+	count(cd_empresa ) as totalVendas
+from tb_venda tv
+where upper(tv.tx_status) = upper('PAGO')
+group by cd_empresa
+)
+select 
+	*
+from variavel 
+inner join tb_empresa te
+on te.id_empresa = variavel.cd_empresa
+inner join total
+   on total.cd_empresa = variavel.cd_empresa
+where variavel.receitaBruta > 10000 
+and total.totalVendas > 3
+
+
+
